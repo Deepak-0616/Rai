@@ -588,6 +588,15 @@ function AskSomeoneModal({
     return () => clearInterval(interval);
   }, [status, shareId]);
 
+  const getWhatsAppShareUrl = () => {
+    const bulletSummary =
+      item.bullets && item.bullets.length > 0
+        ? `\n• ${item.bullets.slice(0, 2).join("\n• ")}`
+        : "";
+    const text = `Hey! Check out this recommendation I found on Rai AI Shopping Concierge:\n\n🛍️ *${item.name}*\n💰 Price: ₹${item.price.toLocaleString("en-IN")}\n⭐ ValueIQ Score: ${item.score}/100${bulletSummary}\n\nWhat do you think? Should I buy this?`;
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 backdrop-blur-md sm:items-center sm:p-5 fade-in"
@@ -623,12 +632,22 @@ function AskSomeoneModal({
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-surface text-2xl shadow-sm">{item.img}</div>
               <div className="text-[13px] font-medium leading-snug text-ink">{item.name}</div>
             </div>
-            <button
-              onClick={send}
-              className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-bold"
-            >
-              <Share2 size={15} /> {lang.askSomeone.sendTo.replace("{name}", "Didi")}
-            </button>
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={send}
+                className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold"
+              >
+                <Share2 size={15} /> {lang.askSomeone.sendTo.replace("{name}", "Didi")}
+              </button>
+              <a
+                href={getWhatsAppShareUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#20bd5a] hover:shadow-md"
+              >
+                <MessageCircle size={16} /> Share via WhatsApp
+              </a>
+            </div>
           </>
         )}
 
